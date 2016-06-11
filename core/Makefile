@@ -13,4 +13,4 @@ $(TARGET): $(C_OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(shell find . -name "*.o") $(TEMP) $(TARGET)
+	rm -f $(shell find . -name "*.o") $(TEMP) $(TARGET) config.h

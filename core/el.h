@@ -10,7 +10,13 @@
 #include<errno.h>
 #include<fcntl.h>
 #include <unistd.h>
-#include <sys/event.h>
+#include "config.h"
+#ifdef HAVE_KQUEUE_H
+  #include <sys/event.h>
+#endif
+#ifdef HAVE_EPOLL_H
+  #include <sys/epoll.h>
+#endif
 
 #define LISTENQ 1024
 #define TRUE 1
@@ -19,8 +25,10 @@
 ---------------
 all kinds of io multi flags
  */
-#define READ_EVENT EVFILT_READ
-#define WRITE_EVENT EVFILT_WRITE
+#ifdef HAVE_KQUEUE_H
+  #define READ_EVENT EVFILT_READ
+  #define WRITE_EVENT EVFILT_WRITE
+#endif
 //---------------------
 //max epoll or kqueue event's size
 #define MAX_EVENT_COUNT 1024
