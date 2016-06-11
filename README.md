@@ -57,10 +57,15 @@ int el_loop_run(el_loop *loop)
 ```
 > To start this event loop.
 
-```
+```c
 void el_loop_free(el_loop *loop)
 ```
->
+>free event loop.
+
+```c
+void error(const char *msg)
+```
+>print msg, errno message and exit(-1).
 
 ###example
 
