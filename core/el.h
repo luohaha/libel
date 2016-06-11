@@ -32,6 +32,9 @@ all kinds of io multi flags
   #define MAX_EVENT_COUNT 1024
 #endif
 #ifdef HAVE_EPOLL_H
+  #define READ_EVENT EPOLLIN
+  #define WRITE_EVENT EPOLLOUT
+  //epoll' fd size
   #define EPOLL_FD_SIZE 1024
 #endif
 //---------------------
