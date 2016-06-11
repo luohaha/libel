@@ -36,7 +36,7 @@ int delete(int epollfd, int fd, int flags) {
 void kqueue_init(el_loop *loop) {
   loop->ioid = kqueue();
   if (loop->ioid < 0)
-    error("kqueue error!\n");
+    error("kqueue create error!\n");
 }
 
 void kqueue_add(el_loop *loop, event *ev) {
