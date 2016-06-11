@@ -95,6 +95,7 @@ el_loop *el_loop_new();
 event *el_event_new(int fd, int flags, cb_func cb, void *arg);
 void el_event_add(el_loop *loop, event *e);
 int el_loop_run(el_loop *loop);
+void el_loop_free(el_loop *loop);
 
 //event.c
 

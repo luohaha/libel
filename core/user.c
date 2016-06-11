@@ -19,3 +19,8 @@ void el_event_add(el_loop *loop, event *e) {
 int el_loop_run(el_loop *loop) {
   return loop_run(loop);
 }
+
+void el_loop_free(el_loop *loop) {
+  close(loop->ioid);
+  loop_free(loop);
+}
