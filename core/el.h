@@ -28,11 +28,15 @@ all kinds of io multi flags
 #ifdef HAVE_KQUEUE_H
   #define READ_EVENT EVFILT_READ
   #define WRITE_EVENT EVFILT_WRITE
+  //max kqueue event's size
+  #define MAX_EVENT_COUNT 1024
+#endif
+#ifdef HAVE_EPOLL_H
+  #define EPOLL_FD_SIZE 1024
 #endif
 //---------------------
-//max epoll or kqueue event's size
-#define MAX_EVENT_COUNT 1024
-//max line
+
+//max buffer's size
 #define MAXLINE 1024
 //callback
 typedef void (*cb_func) (int fd, int size, void *arg);
