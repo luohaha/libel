@@ -13,11 +13,7 @@ if gcc -E .test.h
 rm .test.h
 
 cat > .test.h <<'EOM'
-#include<stdio.h>
-#include<stdlib.h>
-int main() {
-int a = kqueue();
-}
+#include<sys/event.h>
 EOM
 if gcc -E .test.h
  then
@@ -27,3 +23,5 @@ if gcc -E .test.h
   echo '# undef HAVE_KQUEUE_H' >> config.h
   echo '#endif' >> config.h
  fi
+
+rm .test.h
