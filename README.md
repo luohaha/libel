@@ -21,7 +21,7 @@ gcc -o test test.c -lel
 ###support
 
 Libel execute a callback function when a specific event happen on a file descriptor.  
-Now libel use kqueue on freebsd, and epoll on linux.
+Now libel use `kqueue` on freebsd, and `epoll` on linux.
 
 ###struct
 
