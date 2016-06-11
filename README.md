@@ -46,7 +46,7 @@ el_loop *el_loop_new()
 >create a new event loop.
 
 ```c
-event *el_event_new(int fd, int flags, void (*cb) (int fd, int size, void *arg), void arg)
+event *el_event_new(int fd, int flags, void (*cb) (int fd, int size, void *arg), void *arg)
 ```
 >create a new event.  
 >fd : the file descriptor that you want to listen.  
