@@ -12,7 +12,13 @@ make install
 
 ###use to use
 
-After install libel, you can compile your code like this:  
+After install libel, you need to add header: 
+
+```
+#include<libel/el.h>
+```
+
+You can compile your code using `-lel` like this:  
 
 ```
 gcc -o test test.c -lel
@@ -21,7 +27,7 @@ gcc -o test test.c -lel
 
 ###support
 
-Libel is , and now support freeBSD, OS X and linux.  
+Libel is a multi-platform support library, and now support freeBSD, OS X and linux.  
 Now libel use `kqueue` on freebsd, and `epoll` on linux.
 
 ###struct
