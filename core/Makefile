@@ -1,6 +1,6 @@
 TARGET=libel.so
 CC=gcc
-CFLAGS=-ggdb -o3 -w
+CFLAGS=-ggdb -o3 -w -fPIC
 C_SOURCES=$(shell find . -name "*.c")
 C_OBJECTS=$(patsubst %.c, %.o, $(C_SOURCES))
 HEADERS=$(shell find . -name "*.h")
