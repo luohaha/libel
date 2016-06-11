@@ -28,7 +28,7 @@ void epoll_dispatch(el_loop *loop) {
   int i;
   for (i = 0; i < ret; i++) {
     int sock = events[i].data.fd;
-    int data = strlen(events[i].data.ptr);
+    int data = strlen((char*)events[i].data.ptr);
     event *e = event_list_delete(loop->active_events, sock);
     epoll_del(loop, e);
     e->size = data;

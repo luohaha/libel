@@ -10,6 +10,7 @@
 #include<errno.h>
 #include<fcntl.h>
 #include <unistd.h>
+#include<string.h>
 #include "config.h"
 #ifdef HAVE_KQUEUE_H
   #include <sys/event.h>
