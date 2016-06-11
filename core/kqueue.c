@@ -1,6 +1,5 @@
 #include "el.h"
 
-#ifdef HAVE_KQUEUE_H
 void set_nonblock(int fd) {
   int flag;
   if ((flag = fcntl(fd, F_GETFL, 0)) < 0)
@@ -9,6 +8,7 @@ void set_nonblock(int fd) {
     error("fcntl set error!");
 }
 
+#ifdef HAVE_KQUEUE_H
 /**
 regist event
  **/

@@ -5,13 +5,14 @@ el_loop *loop_create() {
   loop->event_count = 0;
   loop->active_events = event_list_init();
   loop->ready_events = event_list_init();
-  kqueue_init(loop);
+  //kqueue_init(loop);
   #ifdef HAVE_KQUEUE_H
     using_kqueue(loop);
   #endif
   #ifdef HAVE_EPOLL_H
     using_epoll(loop);
   #endif
+  loop->io.init(loop);
   return loop;
 }
 

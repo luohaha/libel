@@ -124,6 +124,7 @@ void kqueue_del(el_loop *loop, event *ev);
 void kqueue_dispatch(el_loop *loop);
 void using_kqueue(el_loop* loop);
 #endif
+void set_nonblock(int fd);
 
 //epoll.c
 #ifdef HAVE_EPOLL_H

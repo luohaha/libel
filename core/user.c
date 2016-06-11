@@ -12,7 +12,8 @@ event *el_event_new(int fd, int flags, cb_func cb, void *arg) {
 void el_event_add(el_loop *loop, event *e) {
   event_list_put(loop->active_events, e);
   loop->event_count++;
-  kqueue_add(loop, e);
+  //kqueue_add(loop, e);
+  loop->io.add(loop, e);
 }
 
 int el_loop_run(el_loop *loop) {
