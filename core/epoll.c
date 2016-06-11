@@ -1,5 +1,6 @@
 #include "el.h"
 
+#ifdef HAVE_EPOLL_H
 void epoll_init(el_loop *loop) {
   loop->ioid = epoll_create(EPOLL_FD_SIZE);
   if (loop->ioid < 0)
@@ -42,3 +43,4 @@ void using_epoll(el_loop *loop) {
   loop->io.del = epoll_del;
   loop->io.dispatch = epoll_dispatch;
 }
+#endif

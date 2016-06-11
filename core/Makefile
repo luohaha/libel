@@ -12,5 +12,8 @@ $(TARGET): $(C_OBJECTS)
 %.o: $(C_SOURCES) %.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
+config:
+	sh sys_compat.sh
+
 clean:
 	rm -f $(shell find . -name "*.o") $(TEMP) $(TARGET) config.h

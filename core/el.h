@@ -114,11 +114,21 @@ void loop_free(el_loop *loop);
 int loop_run(el_loop *loop);
 
 //kqueue.c
-
+#ifdef HAVE_KQUEUE_H
 void kqueue_init(el_loop *loop);
 void kqueue_add(el_loop *loop, event *ev);
 void kqueue_del(el_loop *loop, event *ev);
 void kqueue_dispatch(el_loop *loop);
 void using_kqueue(el_loop* loop);
+#endif
+
+//epoll.c
+#ifdef HAVE_EPOLL_H
+void epoll_init(el_loop *loop);
+void epoll_add(el_loop *loop, event *ev);
+void epoll_del(el_loop *loop, event *ev);
+void epoll_dispatch(el_loop *loop);
+void using_epoll(el_loop *loop);
+#endif
 
 #endif

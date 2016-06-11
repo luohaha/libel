@@ -1,7 +1,6 @@
 #include "el.h"
 
-
-
+#ifdef HAVE_KQUEUE_H
 void set_nonblock(int fd) {
   int flag;
   if ((flag = fcntl(fd, F_GETFL, 0)) < 0)
@@ -68,16 +67,5 @@ void using_kqueue(el_loop *loop) {
   loop->io.del = kqueue_del;
   loop->io.dispatch = kqueue_dispatch;
 }
-/*
-int main() {
-  int listenfd = create_listener();
-  int connfd;
-  int epollfd;
-  if ((epollfd = kqueue()) < 0)
-    error("kqueue error!\n");
-  set_nonblock(listenfd);
-  regist(epollfd, listenfd, EVFILT_READ);
-  wait_events(epollfd, listenfd);
-  return 0;
-}
-*/
+
+#endif
