@@ -1,5 +1,6 @@
 # libel
-An event-driven library.
+An event-driven library.  
+Libel execute a callback function when a specific event happen on a file descriptor. 
 
 ###install
 
@@ -20,7 +21,7 @@ gcc -o test test.c -lel
 
 ###support
 
-Libel execute a callback function when a specific event happen on a file descriptor.  
+Libel is , and now support freeBSD, OS X and linux.  
 Now libel use `kqueue` on freebsd, and `epoll` on linux.
 
 ###struct
