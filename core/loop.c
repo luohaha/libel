@@ -6,7 +6,12 @@ el_loop *loop_create() {
   loop->active_events = event_list_init();
   loop->ready_events = event_list_init();
   kqueue_init(loop);
-  using_kqueue(loop);
+  #ifdef HAVE_KQUEUE_H
+    using_kqueue(loop);
+  #endif
+  #ifdef HAVE_EPOLL_H
+    using_epoll(loop);
+  #endif
   return loop;
 }
 
