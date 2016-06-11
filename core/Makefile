@@ -13,7 +13,7 @@ $(TARGET): $(C_OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 config:
-	sh sys_compat.sh
+	sh sys_compat.sh 1>/dev/null 2>&1
 
 clean:
 	rm -f $(shell find . -name "*.o") $(TEMP) $(TARGET) config.h
