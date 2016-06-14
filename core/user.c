@@ -9,10 +9,17 @@ event *el_event_new(int fd, int flags, cb_func cb, void *arg) {
   return event_init(fd, flags, cb, arg);
 }
 
+event *el_sigevent_new(int signo, cb_func cb, void *arg) {
+  event *e = event_init(-1, READ_EVENT, cb, arg);
+  sig_event *se = sig_event_init(e, signo);
+  e->fd = se->pipe[0];
+  set_nonblock(e->fd);
+  return e;
+}
+
 void el_event_add(el_loop *loop, event *e) {
   event_list_put(loop->active_events, e);
   loop->event_count++;
-  //kqueue_add(loop, e);
   loop->io.add(loop, e);
 }
 
@@ -23,4 +30,8 @@ int el_loop_run(el_loop *loop) {
 void el_loop_free(el_loop *loop) {
   close(loop->ioid);
   loop_free(loop);
+}
+
+void el_error(const char *msg) {
+  error(msg);
 }

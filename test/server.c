@@ -7,15 +7,15 @@ int create_listener() {
   int listenfd;
   struct sockaddr_in *servaddr = (struct sockaddr_in*) malloc(sizeof(struct sockaddr_in));
   if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    error("socket error!");
+    el_error("socket error!");
   servaddr->sin_family = AF_INET;
   servaddr->sin_port = htons(3333);
   if (inet_pton(AF_INET, "0.0.0.0", &servaddr->sin_addr) < 0)
-    error("inet_pton error!");
+    el_error("inet_pton error!");
   if (bind(listenfd, (struct sockaddr *)servaddr, sizeof(struct sockaddr_in)) < 0)
-    error("bind error!");
+    el_error("bind error!");
   if (listen(listenfd, LISTENQ) < 0)
-    error("listen error!");
+    el_error("listen error!");
   return listenfd;
 }
 
@@ -35,7 +35,7 @@ void onread(int fd, int size, void *arg) {
       el_event_add(loop, e);
       return;
     } else
-      error("read from connected socket error!");
+      el_error("read from connected socket error!");
   }
 }
 
@@ -49,7 +49,7 @@ void onaccept(int fd, int size, void *arg) {
 	  || errno == EINTR || errno == EPROTO) {
 	continue;
       } else
-	error("accept error!");
+	el_error("accept error!");
     }
     event *e = el_event_new(connfd, READ_EVENT, onread, loop);
     el_event_add(loop, e);
