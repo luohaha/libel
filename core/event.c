@@ -6,6 +6,7 @@ event *event_init(int fd, int flags, cb_func cb, void *arg) {
   e->flags = flags;
   e->arg = arg;
   e->cb = cb;
+  e->type = DEFAULT;
   return e;
 }
 

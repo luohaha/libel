@@ -2,6 +2,7 @@
 
 el_loop *loop_create() {
   el_loop *loop = (el_loop*) malloc(sizeof(el_loop));
+  sig_event_list_init(&sig_list);
   loop->event_count = 0;
   loop->active_events = event_list_init();
   loop->ready_events = event_list_init();
@@ -46,6 +47,8 @@ int loop_run(el_loop *loop) {
       //call the callback function
       e->cb(e->fd, e->size, e->arg);
       event_free(e);
+      if (e->type == SIGNAL)
+	close(e->fd);
       loop->event_count--;
     }
   }

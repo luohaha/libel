@@ -9,8 +9,9 @@
 #include<arpa/inet.h>
 #include<errno.h>
 #include<fcntl.h>
-#include <unistd.h>
+#include<unistd.h>
 #include<string.h>
+#include<signal.h>
 #include "config.h"
 #ifdef HAVE_KQUEUE_H
   #include <sys/event.h>
@@ -42,13 +43,18 @@ all kinds of io multi flags
 
 //max buffer's size
 #define MAXLINE 1024
+
 //callback
 typedef void (*cb_func) (int fd, int size, void *arg);
 typedef void (*io_init) (struct __el_loop *);
 typedef void (*io_add) (struct __el_loop *,  struct __event *);
 typedef void (*io_del) (struct __el_loop *,  struct __event *);
 typedef void (*io_dispatch) (struct __el_loop *);
-
+typedef void sigfunc(int);
+typedef enum {
+  DEFAULT,
+  SIGNAL
+} EVENT_TYPE;
 /**
    事件
  **/
@@ -58,9 +64,26 @@ typedef struct __event {
   int size;
   void *arg;
   cb_func cb;
+  EVENT_TYPE type;
   struct __event *next;
   struct __event *prev;
 } event;
+
+typedef struct __sig_event {
+  int pipe[2];
+  int signo;
+  struct __sig_event *next;
+  struct __sig_event *prev;
+  event *sevent;
+} sig_event;
+
+/**
+   信号事件队列
+**/
+typedef struct __sig_event_list {
+  int count;
+  sig_event *head;
+} sig_event_list;
 
 /**
    事件队列
@@ -96,6 +119,8 @@ event *el_event_new(int fd, int flags, cb_func cb, void *arg);
 void el_event_add(el_loop *loop, event *e);
 int el_loop_run(el_loop *loop);
 void el_loop_free(el_loop *loop);
+event *el_sigevent_new(int signo, cb_func cb, void *arg);
+void el_error(const char *msg);
 
 //event.c
 
@@ -138,5 +163,18 @@ void using_epoll(el_loop *loop);
 
 //utils.c
 void set_nonblock(int fd);
+void init_pipe(sig_event *se);
+void register_handler(int signo);
+void init_signal(sig_event * se) ;
+
+//signal_event.c
+sig_event *sig_event_init(event *e, int signo);
+void sig_event_free(sig_event *sig);
+void sig_event_list_init(sig_event_list *list);
+void sig_event_list_add(sig_event_list *list, sig_event *e);
+sig_event *find_sigevent(sig_event_list *list, int no);
+
+//全局信号链表
+sig_event_list sig_list;
 
 #endif
