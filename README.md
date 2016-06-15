@@ -86,7 +86,7 @@ void el_error(const char *msg)
 
 ###example
 
->An example of a simple server accept connection from many clients.
+#####1. An example of a simple server accept connection from many clients.
 
 server  
 
@@ -227,7 +227,7 @@ int main() {
 
 ```
 
->an example of signal handler
+#####2. an example of signal handler
 
 ```c
 #include<libel/el.h>
@@ -251,7 +251,7 @@ int main() {
 
 ```
 
->an example of timer
+#####3. an example of timer
 
 ```c
 #include<libel/el.h>
