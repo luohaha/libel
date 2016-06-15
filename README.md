@@ -1,6 +1,6 @@
 # libel
 An event-driven library.  
-Libel execute a callback function when a specific event happen on a file descriptor. 
+Libel execute a callback function when a specific event happen on a file descriptor, or a sepcific signal happen. And also after a timeout has been reached.
 
 ###install
 
@@ -242,8 +242,10 @@ void cb2(int fd, int size, void *arg) {
 
 int main() {
   el_loop *loop = el_loop_new();
+  //创建信号处理函数，处理信号SIGINT
   event *e = el_sigevent_new(SIGINT, cb, NULL);
   el_event_add(loop, e);
+  //创建信号处理函数，处理信号SIGQUIT
   event *e2 = el_sigevent_new(SIGQUIT, cb2, NULL);
   el_event_add(loop, e2);
   return el_loop_run(loop);
@@ -261,6 +263,7 @@ int tt;
 void cb(int fd, int size, void *arg) {
   el_loop *loop = (el_loop*) arg;
   printf("%d\n", tt++);
+  //如果想要定时器继续，同样需要重新建立
   event *e = el_timer(3000, cb, loop);
   el_event_add(loop, e);
 }
@@ -271,8 +274,10 @@ void cb2(int fd, int size, void *arg) {
 
 int main() {
   el_loop *loop = el_loop_new();
+  //创建定时事件，时间间隔为3000ms
   event *e = el_timer(3000, cb, loop);
   el_event_add(loop, e);
+  //创建信号处理事件，处理信号SIGINT
   event *e2 = el_sigevent_new(SIGINT, cb2, NULL);
   el_event_add(loop, e2);
   return el_loop_run(loop);
