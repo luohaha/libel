@@ -55,6 +55,16 @@ event *el_event_new(int fd, int flags, void (*cb) (int fd, int size, void *arg),
 >arg : it will be pass to callback function
 
 ```c
+event *el_sigevent_new(int signo, cb_func cb, void *arg) 
+```
+>create a new signal handler event. `signo` is the signal type, such as `SIGINT`.
+
+```c
+event *el_timer(int timeout, cb_func cb, void *arg)
+```
+>create a new timer event, `timeout`'s unit is millisecond.
+
+```c
 void el_event_add(el_loop *loop, event *e)
 ```
 >add an event to a loop.
@@ -70,7 +80,7 @@ void el_loop_free(el_loop *loop)
 >free event loop.
 
 ```c
-void error(const char *msg)
+void el_error(const char *msg)
 ```
 >print msg, errno message and exit(-1).
 
@@ -90,15 +100,15 @@ int create_listener() {
   int listenfd;
   struct sockaddr_in *servaddr = (struct sockaddr_in*) malloc(sizeof(struct sockaddr_in));
   if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    error("socket error!");
+    el_error("socket error!");
   servaddr->sin_family = AF_INET;
   servaddr->sin_port = htons(3333);
   if (inet_pton(AF_INET, "0.0.0.0", &servaddr->sin_addr) < 0)
-    error("inet_pton error!");
+    el_error("inet_pton error!");
   if (bind(listenfd, (struct sockaddr *)servaddr, sizeof(struct sockaddr_in)) < 0)
-    error("bind error!");
+    el_error("bind error!");
   if (listen(listenfd, LISTENQ) < 0)
-    error("listen error!");
+    el_error("listen error!");
   return listenfd;
 }
 
@@ -123,7 +133,7 @@ void onread(int fd, int size, void *arg) {
       el_event_add(loop, e);
       return;
     } else
-      error("read from connected socket error!");
+      el_error("read from connected socket error!");
   }
 }
 
@@ -141,7 +151,7 @@ void onaccept(int fd, int size, void *arg) {
 	  || errno == EINTR || errno == EPROTO) {
 	continue;
       } else
-	error("accept error!");
+	el_error("accept error!");
     }
     /**
     	将新建立的连接新建为事件，并加入loop。回调函数为onread。
@@ -217,5 +227,58 @@ int main() {
 
 ```
 
+>an example of signal handler
+
+```c
+#include<libel/el.h>
+
+void cb(int fd, int size, void *arg) {
+  printf("sigint\n");
+}
+
+void cb2(int fd, int size, void *arg) {
+  printf("sigquit\n");
+}
+
+int main() {
+  el_loop *loop = el_loop_new();
+  event *e = el_sigevent_new(SIGINT, cb, NULL);
+  el_event_add(loop, e);
+  event *e2 = el_sigevent_new(SIGQUIT, cb2, NULL);
+  el_event_add(loop, e2);
+  return el_loop_run(loop);
+}
+
+```
+
+>an example of timer
+
+```c
+#include<libel/el.h>
+
+int tt;
+
+void cb(int fd, int size, void *arg) {
+  el_loop *loop = (el_loop*) arg;
+  printf("%d\n", tt++);
+  event *e = el_timer(3000, cb, loop);
+  el_event_add(loop, e);
+}
+
+void cb2(int fd, int size, void *arg) {
+  printf("sigint\n");
+}
+
+int main() {
+  el_loop *loop = el_loop_new();
+  event *e = el_timer(3000, cb, loop);
+  el_event_add(loop, e);
+  event *e2 = el_sigevent_new(SIGINT, cb2, NULL);
+  el_event_add(loop, e2);
+  return el_loop_run(loop);
+}
+
+```
+
 ###Todo
-`timer`, `signal`, `support more system`.
+`support more system`.
