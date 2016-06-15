@@ -24,7 +24,13 @@ void epoll_del(el_loop *loop, event *ev) {
 
 void epoll_dispatch(el_loop *loop) {
   struct epoll_event events[EPOLL_FD_SIZE];
-  int ret = epoll_wait(loop->ioid, events, EPOLL_FD_SIZE, -1);
+  int ret = epoll_wait(loop->ioid, events, EPOLL_FD_SIZE, loop->timeout);
+  if (ret == 0) {
+    //timeout
+    loop->timeout = -1;
+    if (tevent != NULL)
+      event_list_put(loop->ready_events, tevent);
+  }
   int i;
   for (i = 0; i < ret; i++) {
     int sock = events[i].data.fd;

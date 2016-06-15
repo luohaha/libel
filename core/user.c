@@ -17,10 +17,21 @@ event *el_sigevent_new(int signo, cb_func cb, void *arg) {
   return e;
 }
 
+event *el_timer(int timeout, cb_func cb, void *arg) {
+  tevent = event_init(timeout, READ_EVENT, cb, arg);
+  tevent->type = TIMER;
+  return tevent;
+}
+
 void el_event_add(el_loop *loop, event *e) {
-  event_list_put(loop->active_events, e);
-  loop->event_count++;
-  loop->io.add(loop, e);
+  if (e->type == TIMER) {
+    loop->timeout = e->fd;
+    loop->event_count++;
+  } else {
+    event_list_put(loop->active_events, e);
+    loop->event_count++;
+    loop->io.add(loop, e);
+  }
 }
 
 int el_loop_run(el_loop *loop) {

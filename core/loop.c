@@ -4,6 +4,7 @@ el_loop *loop_create() {
   el_loop *loop = (el_loop*) malloc(sizeof(el_loop));
   sig_event_list_init(&sig_list);
   loop->event_count = 0;
+  loop->timeout = -1;
   loop->active_events = event_list_init();
   loop->ready_events = event_list_init();
   //kqueue_init(loop);

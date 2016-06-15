@@ -1,5 +1,8 @@
 #include "el.h"
 
+//全局信号链表
+sig_event_list sig_list;
+
 sig_event *sig_event_init(event *e, int signo) {
   sig_event *se = (sig_event*) malloc(sizeof(sig_event));
   init_pipe(se->pipe);

@@ -6,6 +6,7 @@
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<sys/time.h>
+#include<time.h>
 #include<arpa/inet.h>
 #include<errno.h>
 #include<fcntl.h>
@@ -53,7 +54,8 @@ typedef void (*io_dispatch) (struct __el_loop *);
 typedef void sigfunc(int);
 typedef enum {
   DEFAULT,
-  SIGNAL
+  SIGNAL,
+  TIMER
 } EVENT_TYPE;
 /**
    事件
@@ -105,6 +107,7 @@ typedef struct __el_loop {
   int event_count;
   io_multi io;
   int ioid;
+  int timeout; //ms
   el_event_list *active_events;
   el_event_list *ready_events;
 } el_loop;
@@ -121,6 +124,7 @@ int el_loop_run(el_loop *loop);
 void el_loop_free(el_loop *loop);
 event *el_sigevent_new(int signo, cb_func cb, void *arg);
 void el_error(const char *msg);
+event *el_timer(int timeout, cb_func cb, void *arg);
 
 //event.c
 
@@ -174,7 +178,14 @@ void sig_event_list_init(sig_event_list *list);
 void sig_event_list_add(sig_event_list *list, sig_event *e);
 sig_event *find_sigevent(sig_event_list *list, int no);
 
+//timer.c
+int time_from_start_to_now(struct timespec start);
+void reset_time(struct timespec *ts);
+
 //全局信号链表
-sig_event_list sig_list;
+extern sig_event_list sig_list;
+
+//超时事件
+extern event *tevent;
 
 #endif

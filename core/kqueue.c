@@ -40,7 +40,28 @@ void kqueue_del(el_loop *loop, event *ev) {
 
 void kqueue_dispatch(el_loop *loop) {
   struct kevent events[MAX_EVENT_COUNT];
-  int ret = kevent(loop->ioid, NULL, 0, events, MAX_EVENT_COUNT, NULL);
+  int ret;
+  if (loop->timeout > 0) {
+    //启动了定时器
+    struct timespec t;
+    if (loop->timeout >= 1000) {
+      t.tv_nsec = 0;
+      t.tv_sec = loop->timeout / 1000;
+    } else {
+      t.tv_nsec = loop->timeout * 1000000;
+      t.tv_sec = 0;
+    }
+    ret = kevent(loop->ioid, NULL, 0, events, MAX_EVENT_COUNT, &t);
+    if (ret == 0) {
+      //timeout
+      loop->timeout = -1;
+      if (tevent != NULL)
+	event_list_put(loop->ready_events, tevent);
+    } 
+  } else {
+    ret = kevent(loop->ioid, NULL, 0, events, MAX_EVENT_COUNT, NULL);
+  }
+  
   int i;
   for (i = 0; i < ret; i++) {
     int sock = events[i].ident;
