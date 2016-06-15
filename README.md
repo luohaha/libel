@@ -28,7 +28,7 @@ gcc -o test test.c -lel
 ###support
 
 Libel is a multi-platform support library, and now support freeBSD, OS X and linux.  
-Now libel use `kqueue` on freebsd, and `epoll` on linux.
+Now libel use `kqueue` on freebsd(also OS X), and `epoll` on linux.
 
 ###struct
 
