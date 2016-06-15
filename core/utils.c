@@ -18,7 +18,7 @@ void register_handler(int signo) {
   char c;
   sig_event *se = find_sigevent(&sig_list, signo);
   if (se == NULL)
-    error("signal event error!");
+    return;
   if (write(se->pipe[1], &c, 1) < 0)
     error("pipe fd write error!");
   close(se->pipe[1]);
