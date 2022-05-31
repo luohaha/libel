@@ -2,7 +2,7 @@
 An event-driven library.  
 Libel execute a callback function when a specific event happen on a file descriptor, or a sepcific signal happen. And also after a timeout has been reached.
 
-###install
+### install
 
 ```
 make config
@@ -10,7 +10,7 @@ make
 make install
 ```
 
-###use to use
+### use to use
 
 After install libel, you need to add header: 
 
@@ -25,12 +25,12 @@ gcc -o test test.c -lel
 ```
 
 
-###support
+### support
 
 Libel is a multi-platform support library, and now support freeBSD, OS X and linux.  
 Now libel use `kqueue` on freebsd(also OS X), and `epoll` on linux.
 
-###struct
+### struct
 
 `el_loop`
 >An event loop.
@@ -38,7 +38,7 @@ Now libel use `kqueue` on freebsd(also OS X), and `epoll` on linux.
 `event`
 > An event.
 
-###api
+### api
 
 ```c
 el_loop *el_loop_new()
@@ -84,9 +84,9 @@ void el_error(const char *msg)
 ```
 >print msg, errno message and exit(-1).
 
-###example
+### example
 
-#####1. An example of a simple server accept connection from many clients.
+##### 1. An example of a simple server accept connection from many clients.
 
 server  
 
@@ -227,7 +227,7 @@ int main() {
 
 ```
 
-#####2. an example of signal handler
+##### 2. an example of signal handler
 
 ```c
 #include<libel/el.h>
@@ -253,7 +253,7 @@ int main() {
 
 ```
 
-#####3. an example of timer
+##### 3. an example of timer
 
 ```c
 #include<libel/el.h>
@@ -285,5 +285,5 @@ int main() {
 
 ```
 
-###Todo
+### Todo
 `support more system`.
